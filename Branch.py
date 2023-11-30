@@ -19,7 +19,7 @@ class Branch(example_pb2_grpc.BranchServicer):
         ]
 
     def extendedMsgForProp(self, request, propagate):
-        print(request.branchId)
+        # print(request.branchId)
         result = "success"
         if request.money < 0:
             result = "fail"

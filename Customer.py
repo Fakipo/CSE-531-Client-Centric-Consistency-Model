@@ -19,14 +19,7 @@ class Customer:
 
     # Send gRPC request for each event
     def executeEvents(self):
-        currBranchId = None
         for event in self.events:
-            if event['branch'] != currBranchId:
-                if self.recvMsg:
-                    self.finalAppend.append({"id": self.id, "recv": self.recvMsg})
-                    self.recvMsg = []
-                currBranchId = event['branch']
-
             if event["interface"] != "query":
                 response = self.stub.MsgDelivery(
                     example_pb2.MsgRequest(id=event["id"], branchId=event["branch"], interface=event["interface"], money=event["money"])
@@ -35,7 +28,7 @@ class Customer:
                 response = self.stub.MsgDelivery(
                     example_pb2.MsgRequest(id=event["id"], branchId=event["branch"], interface=event["interface"])
                 )
-            print(event["branch"])
+            # print(event["branch"])
             if response.interface != "query":
                 stringToAppend = {"interface": response.interface, "result": response.result, "branch": event["branch"]}
             else:
@@ -43,6 +36,7 @@ class Customer:
             self.recvMsg.append(stringToAppend)
 
     def output(self):
-        if self.recvMsg:
-            self.finalAppend.append({"id": self.id, "recv": self.recvMsg})
-        return self.finalAppend
+        output_list = []
+        for event in self.recvMsg:
+            output_list.append({"id": self.id, "recv": [event]})
+        return output_list
