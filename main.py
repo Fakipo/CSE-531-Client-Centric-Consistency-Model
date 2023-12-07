@@ -44,7 +44,7 @@ def initiate_customers_from_list(customers, customerProcessList):
         customer_process = multiprocessing.Process(target=customerProcessing, args=(customer,))
         customerProcessList.append(customer_process)
         customer_process.start()
-        sleep(0.4)
+        sleep(10)
 
 def terminate_branch_processes(branchProcessList):
     for branchProcess in branchProcessList:
